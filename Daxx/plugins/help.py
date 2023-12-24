@@ -49,11 +49,11 @@ async def inline_help_menu(client, message: Message):
 @bot.on_callback_query(filters.regex(r"help_(.*?)"))
 @cb_wrapper
 async def help_button(client, query):
-    plug_match = re.match(r"help_plugin\((.+?)\)", query.data)
-    prev_match = re.match(r"help_prev\((.+?)\)", query.data)
-    next_match = re.match(r"help_next\((.+?)\)", query.data)
-    back_match = re.match(r"help_back", query.data)
-    top_text = f"""
+   plug_match = re.match(r"help_plugin\((.+?)\)", query.data)
+   prev_match = re.match(r"help_prev\((.+?)\)", query.data)
+   next_match = re.match(r"help_next\((.+?)\)", query.data)
+   back_match = re.match(r"help_back", query.data)
+   top_text = f"""
 **🥀 Welcome To Help Menu Of
 Daxx Userbot » {__version__} ✨...
 
@@ -61,58 +61,53 @@ Click On Below 🌺 Buttons To
 Get Userbot Commands.
 
 🌷Powered By : [DAXX](https://t.me/iam_daxx).**"""
-    if plug_match:
-        plugin = plug_match.group(1)
-        text = (
-            "**♨️ Plugin :** {}\n".format(
-                PLUGINS[plugin].__NAME__
-            )
-            + PLUGINS[plugin].__MENU__
-        )
-        key = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        text="↪️ Back", callback_data="help_back"
-                    )
-                ],
-            ]
-        )
+   if plug_match:
+      plugin = plug_match.group(1)
+      text = f"**♨️ Plugin :** {PLUGINS[plugin].__NAME__}\n{PLUGINS[plugin].__MENU__}"
+      key = InlineKeyboardMarkup(
+          [
+              [
+                  InlineKeyboardButton(
+                      text="↪️ Back", callback_data="help_back"
+                  )
+              ],
+          ]
+      )
 
-        await bot.edit_inline_text(
-            query.inline_message_id,
-            text=text,
-            reply_markup=key,
-            disable_web_page_preview=True
-        )
-    elif prev_match:
-        curr_page = int(prev_match.group(1))
-        await bot.edit_inline_text(
-            query.inline_message_id,
-            text=top_text,
-            reply_markup=InlineKeyboardMarkup(
-                paginate_plugins(curr_page - 1, PLUGINS, "help")
-            ),
-            disable_web_page_preview=True,
-        )
+      await bot.edit_inline_text(
+          query.inline_message_id,
+          text=text,
+          reply_markup=key,
+          disable_web_page_preview=True
+      )
+   elif prev_match:
+       curr_page = int(prev_match.group(1))
+       await bot.edit_inline_text(
+           query.inline_message_id,
+           text=top_text,
+           reply_markup=InlineKeyboardMarkup(
+               paginate_plugins(curr_page - 1, PLUGINS, "help")
+           ),
+           disable_web_page_preview=True,
+       )
 
-    elif next_match:
-        next_page = int(next_match.group(1))
-        await bot.edit_inline_text(
-            query.inline_message_id,
-            text=top_text,
-            reply_markup=InlineKeyboardMarkup(
-                paginate_plugins(next_page + 1, PLUGINS, "help")
-            ),
-            disable_web_page_preview=True,
-        )
+   elif next_match:
+       next_page = int(next_match.group(1))
+       await bot.edit_inline_text(
+           query.inline_message_id,
+           text=top_text,
+           reply_markup=InlineKeyboardMarkup(
+               paginate_plugins(next_page + 1, PLUGINS, "help")
+           ),
+           disable_web_page_preview=True,
+       )
 
-    elif back_match:
-        await bot.edit_inline_text(
-            query.inline_message_id,
-            text=top_text,
-            reply_markup=InlineKeyboardMarkup(
-                paginate_plugins(0, PLUGINS, "help")
-            ),
-            disable_web_page_preview=True,
-        )
+   elif back_match:
+       await bot.edit_inline_text(
+           query.inline_message_id,
+           text=top_text,
+           reply_markup=InlineKeyboardMarkup(
+               paginate_plugins(0, PLUGINS, "help")
+           ),
+           disable_web_page_preview=True,
+       )

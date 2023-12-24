@@ -18,7 +18,7 @@ async def help_menu_logo(answer):
             photo_url=f"{thumb_image}",
             title="🥀 Help Menu ✨",
             thumb_url=f"{thumb_image}",
-            description=f"🥀 Open Help Menu Of Daxx-Userbot ✨...",
+            description="🥀 Open Help Menu Of Daxx-Userbot ✨...",
             caption=f"""
 **🥀 Welcome To Help Menu Of
 Daxx Userbot » {__version__} ✨...
@@ -67,7 +67,7 @@ async def inline_query_handler(bot, query):
                 query.id, results=answer, cache_time=10
             )
         except Exception as e:
-            print(str(e))
+            print(e)
             return
     elif text.startswith("help_menu_text"):
         answer = []
@@ -77,7 +77,7 @@ async def inline_query_handler(bot, query):
                 query.id, results=answer, cache_time=10
             )
         except Exception as e:
-            print(str(e))
+            print(e)
             return
     else:
         return

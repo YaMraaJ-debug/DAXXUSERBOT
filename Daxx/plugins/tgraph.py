@@ -14,14 +14,13 @@ async def telegraph_uploader(client, message):
     user_id = message.from_user.id
     replied = message.reply_to_message
     m = await eor(message, "**🔄 Processing ✨...**")
-    if replied:
-        text_msg = replied.text
-        animates = replied.animation
-        media = (replied.animation or replied.photo
-              or replied.video or replied.document)
-        sticker =  replied.sticker
-    else:
+    if not replied:
         return await m.edit(f"**🌿 Please Reply To A Media\nOr Text To Generate Telegraph\nLink❗...**")
+    text_msg = replied.text
+    animates = replied.animation
+    media = (replied.animation or replied.photo
+          or replied.video or replied.document)
+    sticker =  replied.sticker
     try:
         if text_msg:
             telegraph.create_account(short_name=f"{message.from_user.first_name}")
@@ -30,7 +29,10 @@ async def telegraph_uploader(client, message):
             if len(message.command) > 1:
                 text_title = ' '.join(message.command[1:])
             else:
-                text_title = str(message.from_user.first_name + " " + (message.from_user.last_name or ""))
+                text_title = str(
+                    f"{message.from_user.first_name} "
+                    + (message.from_user.last_name or "")
+                )
             await m.edit("**📤 Uploading ✨...**")
             response = telegraph.create_page(title=text_title, html_content=text_msg, author_name=author_name, author_url=author_url)
             upload_link = f"https://telegra.ph/{response['path']}"
@@ -39,12 +41,11 @@ async def telegraph_uploader(client, message):
                 disable_web_page_preview=True,
             )
         elif media:
-            if media.file_size <= filesize:
-                await m.edit("**📥 Downloading ✨...**")
-                local_path = f"./downloads/{user_id}_{media.file_unique_id}/"
-                local_file = await replied.download(local_path)
-            else:
+            if media.file_size > filesize:
                 return await m.edit("`🌺 File Size is Too Big❗...`")
+            await m.edit("**📥 Downloading ✨...**")
+            local_path = f"./downloads/{user_id}_{media.file_unique_id}/"
+            local_file = await replied.download(local_path)
         elif sticker:
             return await m.edit("`🚫 Sorry, Sticker Upload\nNot Allowed❗...`")
         else:
@@ -59,7 +60,6 @@ async def telegraph_uploader(client, message):
         os.system(f"rm -rf {local_path}")
     except Exception as e:
         await m.edit(f"**🚫 Error:** `{e}`")
-        pass
 
 
 __NAME__ = "TGraph"

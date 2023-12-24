@@ -23,21 +23,19 @@ async def put_que(chat_id, file, type):
         "file": file,
         "type": type,
     }
-    check = db.get(chat_id)
-    if not check:
-        db[chat_id] = []
-        db[chat_id].append(put)
-    else:
+    if check := db.get(chat_id):
         que = db[chat_id]
         que.append(put)
         return int(len(que)-1)
+    else:
+        db[chat_id] = []
+        db[chat_id].append(put)
 
 
 @call.on_kicked()
 async def kicked_handler(_, chat_id: int):
     try:
-        check = db.get(chat_id)
-        if check:
+        if check := db.get(chat_id):
             return check.pop(0)
         return
     except:
@@ -47,8 +45,7 @@ async def kicked_handler(_, chat_id: int):
 @call.on_closed_voice_chat()
 async def closed_voice_chat_handler(_, chat_id: int):
     try:
-        check = db.get(chat_id)
-        if check:
+        if check := db.get(chat_id):
             return check.pop(0)
         return
     except:
@@ -58,8 +55,7 @@ async def closed_voice_chat_handler(_, chat_id: int):
 @call.on_left()
 async def left_handler(_, chat_id: int):
     try:
-        check = db.get(chat_id)
-        if check:
+        if check := db.get(chat_id):
             return check.pop(0)
         return
     except:
@@ -70,8 +66,7 @@ async def left_handler(_, chat_id: int):
 async def stream_end_handler(_, update: Update):
     chat_id = update.chat_id
     try:
-        check = db.get(chat_id)
-        if check:
+        if check := db.get(chat_id):
             que = db[chat_id]
             que.pop(0)
             if len(que) == 0:

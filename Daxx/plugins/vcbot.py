@@ -27,17 +27,16 @@ async def audio_stream(client, message):
             if len(message.command) < 2:
                  return await m.edit("**🤖 Give Some Query ...**")
             text = message.text.split(None, 1)[1]
-            if "?si=" in text:
-                query = text.split("?si")[0]
-            else:
-                query = text
+            query = text.split("?si")[0] if "?si=" in text else text
             await m.edit("**🔍 Searching ...**")
             search = get_youtube_video(query)
             stream = search[0]
             file = await get_youtube_stream(stream)
         await m.edit("**🔄 Processing ...**")
-        check = db.get(chat_id)
-        if not check:
+        if check := db.get(chat_id):
+            pos = await put_que(chat_id, file, "Audio")
+            await m.edit(f"**😋 Added To Queue #{pos}**")
+        else:
             await call.join_group_call(
                 chat_id,
                 AudioPiped(
@@ -48,11 +47,7 @@ async def audio_stream(client, message):
             )
             await put_que(chat_id, file, "Audio")
             await m.edit("**🥳 Streaming Started!**")
-            await m.delete()
-        else:
-            pos = await put_que(chat_id, file, "Audio")
-            await m.edit(f"**😋 Added To Queue #{pos}**")
-            await m.delete()
+        await m.delete()
     except Exception as e:
         await m.edit(f"**Error:** `{e}`")
 
@@ -76,17 +71,17 @@ async def video_stream(client, message):
             if len(message.command) < 2:
                  return await m.edit("**🤖 Give Some Query ...**")
             text = message.text.split(None, 1)[1]
-            if "?si=" in text:
-                query = text.split("?si")[0]
-            else:
-                query = text
+            query = text.split("?si")[0] if "?si=" in text else text
             await m.edit("**🔍 Searching ...**")
             search = get_youtube_video(query)
             stream = search[0]
             file = await get_youtube_stream(stream)
         await m.edit("**🔄 Processing ...**")
-        check = db.get(chat_id)
-        if not check:
+        if check := db.get(chat_id):
+            pos = await put_que(chat_id, file, "Video")
+            await m.edit(f"**😋 Added To Queue #{pos}**")
+            await m.delete()
+        else:
             await call.join_group_call(
                 chat_id,
                 AudioVideoPiped(
@@ -99,10 +94,6 @@ async def video_stream(client, message):
             await put_que(chat_id, file, "Video")
             await m.edit("**🥳 Streaming Started!**")
             await message.delete()
-        else:
-            pos = await put_que(chat_id, file, "Video")
-            await m.edit(f"**😋 Added To Queue #{pos}**")
-            await m.delete()
     except Exception as e:
         await m.edit(f"**Error:** `{e}`")
 
@@ -112,8 +103,7 @@ async def video_stream(client, message):
 async def pause_stream(client, message):
     chat_id = message.chat.id
     try:
-        check = db.get(chat_id)
-        if check:
+        if check := db.get(chat_id):
             await call.pause_stream(chat_id)
             return await eor(message, "**Stream Paused !**")
         else:
@@ -127,8 +117,7 @@ async def pause_stream(client, message):
 async def resume_streams(client, message):
     chat_id = message.chat.id
     try:
-        check = db.get(chat_id)
-        if check:
+        if check := db.get(chat_id):
             await call.resume_stream(chat_id)
             return await eor(message, "**Stream Resumed !**")
         else:
@@ -142,31 +131,29 @@ async def resume_streams(client, message):
 async def change_streams(client, message):
     chat_id = message.chat.id
     try:
-        check = db.get(chat_id)
-        if check:
-            que = db[chat_id]
-            que.pop(0)
-            if len(que) == 0:
-                await call.leave_group_call(chat_id)
-                return await eor(message, "Empty Queue !")
-            else:
-                file = check[0]["file"]
-                type = check[0]["type"]
-                if type == "Audio":
-                    stream = AudioPiped(
-                        file,
-                        HighQualityAudio(),
-                    )
-                elif type == "Video":
-                    stream = AudioVideoPiped(
-                        file,
-                        HighQualityAudio(),
-                        HighQualityVideo(),
-                    )
-                await call.change_stream(chat_id, stream)
-                return await eor(message, "🥳 Skipped !")
-        else:
+        if not (check := db.get(chat_id)):
             return await eor(message, "**Nothing Playing ...**")
+        que = db[chat_id]
+        que.pop(0)
+        if len(que) == 0:
+            await call.leave_group_call(chat_id)
+            return await eor(message, "Empty Queue !")
+        else:
+            file = check[0]["file"]
+            type = check[0]["type"]
+            if type == "Audio":
+                stream = AudioPiped(
+                    file,
+                    HighQualityAudio(),
+                )
+            elif type == "Video":
+                stream = AudioVideoPiped(
+                    file,
+                    HighQualityAudio(),
+                    HighQualityVideo(),
+                )
+            await call.change_stream(chat_id, stream)
+            return await eor(message, "🥳 Skipped !")
     except Exception as e:
         await eor(message, f"**Error:** `{e}`")
 
@@ -176,8 +163,7 @@ async def change_streams(client, message):
 async def leave_streams(client, message):
     chat_id = message.chat.id
     try:
-        check = db.get(chat_id)
-        if check:
+        if check := db.get(chat_id):
             check.pop(0)
             await call.leave_group_call(chat_id)
             return await eor(message, "**Stream Stopped !**")

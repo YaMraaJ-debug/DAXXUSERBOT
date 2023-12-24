@@ -12,7 +12,7 @@ async def alive_check(client, message):
 
 
 __NAME__ = "Ping"
-__MENU__ = f"""
+__MENU__ = """
 **🥀 Check Userbot Server
 Ping Latency ✨...**
 

@@ -57,8 +57,7 @@ async def update_userbot(client, message):
     chat_id = message.chat.id
     user_id = message.from_user.id
     await message.edit("**🔄 Checking Updates ✨...**")
-    update_avail = updater()
-    if update_avail:
+    if update_avail := updater():
         await message.edit("**🥳 New Update Available\nFor Daxx-Userbot❗**")
         asyncio.sleep(0.5)
         await message.edit("**🔃 Updating ...**")
@@ -70,7 +69,7 @@ async def update_userbot(client, message):
         await message.edit(f"**🥀 Daxx Userbot Already\nUpdated To Latest 🔥 ...\n\n💕 For Any Query › Contact\nTo » @iam_daxx ✨ ...**")
 
 __NAME__ = "Update"
-__MENU__ = f"""
+__MENU__ = """
 **🥀 Use This Plugin To Update
 Your Daxx Userbot.**
 

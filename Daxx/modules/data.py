@@ -14,9 +14,7 @@ permitdb = mongodb.pmprotection
 # Sudo Users
 async def get_sudoers() -> list:
     sudoers = await sudoersdb.find_one({"sudo": "sudo"})
-    if not sudoers:
-        return []
-    return sudoers["sudoers"]
+    return [] if not sudoers else sudoers["sudoers"]
 
 
 async def add_sudo(user_id: int) -> bool:
@@ -55,9 +53,7 @@ async def get_gdel_count() -> int:
 
 async def is_gdel_user(user_id: int) -> bool:
     user = await gdeldb.find_one({"user_id": user_id})
-    if not user:
-        return False
-    return True
+    return bool(user)
 
 
 async def add_gdel_user(user_id: int):
@@ -92,9 +88,7 @@ async def get_lraid_count() -> int:
 
 async def is_lraid_user(user_id: int) -> bool:
     user = await lraiddb.find_one({"user_id": user_id})
-    if not user:
-        return False
-    return True
+    return bool(user)
 
 
 async def add_lraid_user(user_id: int):
@@ -129,9 +123,7 @@ async def get_rraid_count() -> int:
 
 async def is_rraid_user(user_id: int) -> bool:
     user = await rraiddb.find_one({"user_id": user_id})
-    if not user:
-        return False
-    return True
+    return bool(user)
 
 
 async def add_rraid_user(user_id: int):
@@ -158,9 +150,7 @@ async def del_rraid_user(user_id: int):
 
 async def is_approved() -> list:
     pm = await permitdb.find_one({'permit': 'protection'})
-    if not pm:
-        return []
-    return pm['users']
+    return [] if not pm else pm['users']
 
 
 async def approve(user_ud: int):

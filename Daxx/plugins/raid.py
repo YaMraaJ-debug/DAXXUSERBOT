@@ -1,6 +1,6 @@
 
 __NAME__ = "Raid"
-__MENU__ = f"""
+__MENU__ = """
 **Activate Shayari Raid On Any
 Telegram User ...**
 
