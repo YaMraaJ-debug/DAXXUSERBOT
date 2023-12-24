@@ -58,10 +58,9 @@ async def del_sudo_user(client, message: Message):
         if removed:
             SUDOERS.remove(user.id)
             await message.edit("Removed from Bot's Sudo User")
-            return
         else:
-            await message.edit(f"Something wrong happened.")
-            return
+            await message.edit("Something wrong happened.")
+        return
     user_id = message.reply_to_message.from_user.id
     if user_id not in SUDOERS:
         return await message.edit("Not a part of Bot's Sudo.")
@@ -69,10 +68,10 @@ async def del_sudo_user(client, message: Message):
     if removed:
         SUDOERS.remove(user_id)
         await message.edit("Removed from Bot's Sudo User")
-        return
     else:
-        await message.edit(f"Something wrong happened.")
-        return
+        await message.edit("Something wrong happened.")
+
+    return
 
 @app.on_message(commandx(["sudousers", "sudolist", "sl"]) & SUPUSER)
 async def sudo_users_list(client, message: Message):
@@ -109,7 +108,7 @@ async def sudo_users_list(client, message: Message):
 
 
 __NAME__ = "Sudo"
-__MENU__ = f"""
+__MENU__ = """
 **🥀 Add Or Remove Sudo Users
 From Your Userbot ✨...**
 

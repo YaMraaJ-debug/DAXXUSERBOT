@@ -64,9 +64,7 @@ def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
             [
                 EqInlineKeyboardButton(
                     x.__NAME__,
-                    callback_data="{}_plugin({})".format(
-                        prefix, x.__NAME__.lower()
-                    ),
+                    callback_data=f"{prefix}_plugin({x.__NAME__.lower()})",
                 )
                 for x in plugin_dict.values()
             ]
@@ -76,9 +74,7 @@ def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
             [
                 EqInlineKeyboardButton(
                     x.__NAME__,
-                    callback_data="{}_plugin({},{})".format(
-                        prefix, chat, x.__NAME__.lower()
-                    ),
+                    callback_data=f"{prefix}_plugin({chat},{x.__NAME__.lower()})",
                 )
                 for x in plugin_dict.values()
             ]
@@ -111,16 +107,14 @@ def paginate_plugins(page_n, plugin_dict, prefix, chat=None):
         ] + [
             (
                 EqInlineKeyboardButton(
-                    "❮",
-                    callback_data="{}_prev({})".format(prefix, modulo_page),
+                    "❮", callback_data=f"{prefix}_prev({modulo_page})"
                 ),
                 EqInlineKeyboardButton(
                     "Owner",
                     url=f"tg://openmessage?user_id={app.id}",
                 ),
                 EqInlineKeyboardButton(
-                    "❯",
-                    callback_data="{}_next({})".format(prefix, modulo_page),
+                    "❯", callback_data=f"{prefix}_next({modulo_page})"
                 ),
             )
         ]

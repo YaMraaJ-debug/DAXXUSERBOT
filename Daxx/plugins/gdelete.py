@@ -88,7 +88,7 @@ async def gdelete_users_list(client, message: Message):
         
 
 __NAME__ = "Gᴅᴇʟ"
-__MENU__ = f"""
+__MENU__ = """
 **__Rᴇᴘʟʏ Tᴏ Aɴ Usᴇʀ Oʀ Gɪᴠᴇ
 Usᴇʀɴᴀᴍᴇ Tᴏ Aᴄᴛɪᴠᴀᴛᴇ Gʟᴏʙᴀʟ
 Dᴇʟᴇᴛᴇ Oɴ Usᴇʀ:__**

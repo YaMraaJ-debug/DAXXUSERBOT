@@ -14,8 +14,7 @@ async def aditya():
     await client.start()
     log.info("Importing all plugins ...")
     for all_plugin in ALL_PLUGINS:
-        imported_plugin = importlib.import_module(
-            "Daxx.plugins." + all_plugin)
+        imported_plugin = importlib.import_module(f"Daxx.plugins.{all_plugin}")
         if (hasattr(imported_plugin, "__NAME__"
            ) and imported_plugin.__NAME__):
             imported_plugin.__NAME__ = imported_plugin.__NAME__

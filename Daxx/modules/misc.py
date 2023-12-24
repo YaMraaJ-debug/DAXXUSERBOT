@@ -27,9 +27,7 @@ def cb_wrapper(func):
                 await func(bot, cb)
             except Exception:
                 print(format_exc())
-                await cb.answer(
-                    f"❎ Something Went Wrong, Please Check Logs❗..."
-                )
+                await cb.answer("❎ Something Went Wrong, Please Check Logs❗...")
 
     return wrapper
 
@@ -40,32 +38,23 @@ def inline_wrapper(func):
         users = SUDOERS
         if query.from_user.id not in users:
             try:
-                button = [
-                    [
-                        InlineKeyboardButton(
-                            "💥 Deploy Daxx Userbot ✨",
-                            url=f"repo link"
-                        )
-                    ]
-                ]
+                button = [[InlineKeyboardButton("💥 Deploy Daxx Userbot ✨", url="repo link")]]
                 await bot.answer_inline_query(
                     query.id,
                     cache_time=1,
                     results=[
-                        (
-                            InlineQueryResultPhoto(
-                                photo_url=f"img url",
-                                title="🥀 Daxx Userbot ✨",
-                                thumb_url=f"img url",
-                                description=f"🌷 Deploy Your Own Daxx-Userbot 🌿...",
-                                caption=f"<b>🥀 Welcome › To › Daxx 🌷\n✅ Userbot v2.0 ✨...</b>",
-                                reply_markup=InlineKeyboardMarkup(button),
-                            )
+                        InlineQueryResultPhoto(
+                            photo_url="img url",
+                            title="🥀 Daxx Userbot ✨",
+                            thumb_url="img url",
+                            description="🌷 Deploy Your Own Daxx-Userbot 🌿...",
+                            caption=f"<b>🥀 Welcome › To › Daxx 🌷\n✅ Userbot v2.0 ✨...</b>",
+                            reply_markup=InlineKeyboardMarkup(button),
                         )
                     ],
                 )
             except Exception as e:
-                print(str(e))
+                print(e)
                 await bot.answer_inline_query(
                     query.id,
                     cache_time=1,
@@ -81,9 +70,8 @@ def inline_wrapper(func):
                     ],
                 )
             except Exception as e:
-                print(str(e))
-                pass
+                print(e)
         else:
-           return await func(bot, query)
+            return await func(bot, query)
 
     return wrapper

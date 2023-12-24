@@ -7,7 +7,7 @@ async def alive_check(client, message):
 
 
 __NAME__ = "Alive"
-__MENU__ = f"""
+__MENU__ = """
 **🥀 Check Userbot Working
 Or Not ..**
 

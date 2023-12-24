@@ -99,11 +99,9 @@ async def pm_approve(client: Client, message: Message):
         if str(uid) in OLD_MSG and str(uid) in flood:
             await OLD_MSG[str(uid)].delete()
             flood[str(uid)] = 0
-        await asyncio.sleep(3)
-        await xnxx.delete()
     else:
         aname = message.chat
-        if not aname.type == ChatType.PRIVATE:
+        if aname.type != ChatType.PRIVATE:
             await message.reply(
                 "You're not currently in PM and you haven't replied to someone's messages."
             )
@@ -119,8 +117,9 @@ async def pm_approve(client: Client, message: Message):
                 flood[str(uid)] = 0
         except BaseException:
             pass
-        await asyncio.sleep(3)
-        await xnxx.delete()
+
+    await asyncio.sleep(3)
+    await xnxx.delete()
 
 
 @app.on_message(commandx(["disapprove", "da"]))
@@ -133,12 +132,6 @@ async def pm_disapprove(client: Client, message: Message):
             await message.reply("You can't do that to yourself.")
             return
         uid = replied_user.id
-        if uid not in permit:
-            return await message.reply("User does not exist in database.")
-        await disapprove(uid)
-        xnxx = await message.reply("Your message has been rejected.")
-        await asyncio.sleep(3)
-        await xnxx.delete()
     else:
         aname = message.chat
         if aname.type != ChatType.PRIVATE:
@@ -147,12 +140,13 @@ async def pm_disapprove(client: Client, message: Message):
             )
             return
         uid = aname.id
-        if uid not in permit:
-            return await message.reply("User does not exist in database.")
-        await disapprove(uid)
-        xnxx = await message.reply("Your message has been rejected.")
-        await asyncio.sleep(3)
-        await xnxx.delete()
+
+    if uid not in permit:
+        return await message.reply("User does not exist in database.")
+    await disapprove(uid)
+    xnxx = await message.reply("Your message has been rejected.")
+    await asyncio.sleep(3)
+    await xnxx.delete()
 
 
 @app.on_message(commandx(["block"]))
@@ -176,7 +170,7 @@ async def unblock_user_func(client: Client, message: Message):
 
 
 __NAME__ = "PM"
-__MENU__ = f"""
+__MENU__ = """
 **🥀 Private Message Guard ✨...**
 
 `.a` or `.approve`
